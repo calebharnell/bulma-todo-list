@@ -60,7 +60,8 @@ class App extends Component {
 
     return (
       <div className="App">
-        <Header title="INCOMPLETE" totalIncomplete={ tasks.length }/>
+        <Header totalIncomplete={ tasks.filter(task => !task.complete).length } totalComplete={ tasks.filter(task => task.complete).length } />
+
         <form onSubmit={ this.addTask }>
           <Input primary placeholder="Search/Add to do!" value={ searchPhrase } onChange={ this.onChangeQuery }/><br /><br />
           <Button primary>Submit</Button>
@@ -68,10 +69,11 @@ class App extends Component {
         {
           tasks
           .filter(task => task.name.includes(searchPhrase))
-          .map(task => ([
+          .map(task => (
             <Notification success={task.complete} onClick={()=>this.changeCompletedStatus(task.id)}>
               <p>{task.name} - {task.date.toLocaleString()}</p>
-            </Notification>]))
+            </Notification>
+          ))
         }
       </div>
     );
