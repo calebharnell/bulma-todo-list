@@ -19,16 +19,15 @@ class App extends Component {
   addTask = (event) => {
     // stop the browser from submitting the form
     event.preventDefault();
-
-    // update the state with the new task
+    // make a copy of the current tasks
+    const currentTasks = [...this.state.tasks];
+    // add the new task to our copy of tasks
+    currentTasks.unshift( this.state.searchPhrase );
+    // Update the state with the new tasks
     this.setState({
-      tasks: [...this.state.tasks, this.state.searchPhrase],
-
-      // reset search phrase to an empty string
+      tasks: currentTasks,
       searchPhrase: ''
     })
-
-
   }
 
   render() {
