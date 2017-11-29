@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Progress, Level, Heading, Title } from 'reactbulma'
 
 const Header = ({ totalIncomplete, title }) => (

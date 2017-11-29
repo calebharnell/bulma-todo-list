@@ -1,11 +1,20 @@
 import React, { Component } from 'react';
-import { Progress, Level, Heading, Title, Input, Button, Notification } from 'reactbulma'
+import { Input, Button, Notification } from 'reactbulma'
 import './App.css';
 import Header from './components/Header'
 
 class App extends Component {
   state = {
-    tasks: ['Do the washing', 'Walk the dog'],
+    tasks: [
+      {
+        name: 'Do the washing',
+        date: new Date("October 13, 2014 11:13:00")
+      },
+      {
+        name: 'Walk the dog',
+        date: new Date("October 13, 2014 11:15:00")
+      }
+    ],
     searchPhrase: ''
   }
 
@@ -21,8 +30,10 @@ class App extends Component {
     event.preventDefault();
     // make a copy of the current tasks
     const currentTasks = [...this.state.tasks];
+    // check current input against existing task names
+    const existingItem = this.state.tasks.find(task => task.name === this.state.searchPhrase);
     // add the new task to our copy of tasks (only if it isn't already in the list)
-    !currentTasks.includes(this.state.searchPhrase) && currentTasks.unshift( this.state.searchPhrase );
+    !existingItem && currentTasks.unshift({name: this.state.searchPhrase, date: new Date()});
     // Update the state with the new tasks
     this.setState({
       tasks: currentTasks,
@@ -41,11 +52,14 @@ class App extends Component {
           <Input primary placeholder="Search/Add to do!" value={ searchPhrase } onChange={ this.onChangeQuery }/><br /><br />
           <Button primary>Submit</Button>
         </form>
-        { tasks.filter(task => task.includes(searchPhrase)).map(task =>
-          <Notification>
-            <p>{task}</p>
-          </Notification>
-        ) }
+        {
+          tasks
+          .filter(task => task.name.includes(searchPhrase))
+          .map(task => ([
+            <Notification>
+              <p>{task.name} - {task.date.toLocaleString()}</p>
+            </Notification>]))
+        }
       </div>
     );
   }
