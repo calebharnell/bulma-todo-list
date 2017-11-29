@@ -21,8 +21,8 @@ class App extends Component {
     event.preventDefault();
     // make a copy of the current tasks
     const currentTasks = [...this.state.tasks];
-    // add the new task to our copy of tasks
-    currentTasks.unshift( this.state.searchPhrase );
+    // add the new task to our copy of tasks (only if it isn't already in the list)
+    !currentTasks.includes(this.state.searchPhrase) && currentTasks.unshift( this.state.searchPhrase );
     // Update the state with the new tasks
     this.setState({
       tasks: currentTasks,
