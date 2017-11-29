@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Progress, Level, Heading, Title, Input, Button } from 'reactbulma'
+import { Progress, Level, Heading, Title, Input, Button, Notification } from 'reactbulma'
 import './App.css';
 import Header from './components/Header'
 
@@ -41,7 +41,11 @@ class App extends Component {
           <Input primary placeholder="Search/Add to do!" value={ searchPhrase } onChange={ this.onChangeQuery }/><br /><br />
           <Button primary>Submit</Button>
         </form>
-        { tasks.filter(task => task.includes(searchPhrase)).map(task => <p>{task}</p>) }
+        { tasks.filter(task => task.includes(searchPhrase)).map(task =>
+          <Notification>
+            <p>{task}</p>
+          </Notification>
+        ) }
       </div>
     );
   }
