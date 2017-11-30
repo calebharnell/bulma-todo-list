@@ -1,27 +1,15 @@
 import React, { Component } from 'react';
-import { Input, Button, Notification } from 'reactbulma'
+import { Input, Button, Notification } from 'reactbulma';
 import './App.css';
-import Header from './components/Header'
+import Header from './components/Header';
+import axios from 'axios';
 
 let currentKey = 2;
 const genKey = () => ++currentKey;
 
 class App extends Component {
   state = {
-    tasks: [
-      {
-        key: 1,
-        name: 'Do the washing',
-        date: new Date("October 13, 2014 11:13:00"),
-        complete: false
-      },
-      {
-        key: 2,
-        name: 'Walk the dog',
-        date: new Date("October 13, 2014 11:15:00"),
-        complete: false
-      }
-    ],
+    tasks: [],
     searchPhrase: ''
   }
 
@@ -39,13 +27,31 @@ class App extends Component {
     const currentTasks = [...this.state.tasks];
     // check current input against existing task names
     const existingItem = this.state.tasks.find(task => task.name === this.state.searchPhrase);
-    // add the new task to our copy of tasks (only if it isn't already in the list)
-    !existingItem && currentTasks.unshift({key: genKey(), name: this.state.searchPhrase, date: new Date(), complete: false});
-    // Update the state with the new tasks
-    this.setState({
-      tasks: currentTasks,
-      searchPhrase: ''
-    })
+    if (!existingItem) {
+      axios.post('/api/tasks', {
+        key: genKey(),
+        name: this.state.searchPhrase,
+        date: new Date(),
+        complete: false
+      })
+      .then((response) => {
+        console.log(response);
+        // add the new task to our copy of tasks (only if it isn't already in the list)
+        currentTasks.unshift(response.data);
+        this.setState({
+          // Update the state with the new tasks
+          tasks: currentTasks,
+          searchPhrase: ''
+        })
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    } else {
+      this.setState({
+        searchPhrase: ''
+      })
+    }
   }
 
   changeCompletedStatus = (key) => {
@@ -83,6 +89,23 @@ class App extends Component {
         }
       </div>
     );
+  }
+
+  componentDidMount() {
+    // Grab our tasks from the API
+    axios.get('/api/tasks')
+      .then((response) => {
+        console.log('Success!')
+        console.log(response.data);
+        // Set state to array of tasks from API
+        this.setState({
+          tasks: response.data,
+        })
+      })
+      .catch((error) => {
+        console.log('Whoops!')
+        console.log(error);
+      });
   }
 }
 
