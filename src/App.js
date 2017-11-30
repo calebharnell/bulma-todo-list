@@ -69,7 +69,7 @@ class App extends Component {
         totalComplete={ tasks.filter(task => task.complete).length } />
 
         <form onSubmit={ this.addTask }>
-          <Input primary placeholder="Search/Add to do!" value={ searchPhrase } onChange={ this.onChangeQuery }/><br /><br />
+          <Input autoFocus primary placeholder="Search/Add to do!" value={ searchPhrase } onChange={ this.onChangeQuery }/><br /><br />
           <Button primary>Submit</Button>
         </form>
         {
