@@ -4,8 +4,8 @@ import './App.css';
 import Header from './components/Header';
 import axios from 'axios';
 
-let currentKey = 2;
-const genKey = () => ++currentKey;
+let currentKey = 0;
+const genKey = () => currentKey++;
 
 class App extends Component {
   state = {
@@ -32,7 +32,7 @@ class App extends Component {
         key: genKey(),
         name: this.state.searchPhrase,
         date: new Date(),
-        complete: false
+        complete: "false"
       })
       .then((response) => {
         console.log(response);
@@ -82,7 +82,7 @@ class App extends Component {
           tasks
           .filter(task => task.name.includes(searchPhrase))
           .map(task => (
-            <Notification success={task.complete} onClick={()=>this.changeCompletedStatus(task.key)}>
+            <Notification key={task.key} success={task.complete} onClick={()=>this.changeCompletedStatus(task.key)}>
               <p>{task.name} - {task.date.toLocaleString()}</p>
             </Notification>
           ))
